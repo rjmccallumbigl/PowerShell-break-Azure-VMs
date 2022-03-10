@@ -1,2 +1,2 @@
-Get-Service 'WindowsAzureGuestAgent' | Stop-Service -PassThru | Set-Service -StartupType Disabled;
-Get-Service 'rdagent' | Stop-Service -PassThru | Set-Service -StartupType Disabled;
+Register-ScheduledTask -TaskName 'BreakGA' -Trigger (New-ScheduledTaskTrigger -AtStartup) -User "gaBroken\AzureAdmin" -Action (New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-NoProfile -WindowStyle Hidden -command "& { cmd /c "sc config rdagent start= disabled"; cmd /c "sc stop rdagent"; cmd /c "sc config WindowsAzureGuestAgent start= disabled"; cmd /c "sc stop WindowsAzureGuestAgent" }"') -RunLevel Highest –Force; 
+Start-ScheduledTask 'BreakGA';
