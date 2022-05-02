@@ -11,17 +11,11 @@ powershell "(New-Object System.Net.WebClient).DownloadFile('https://aka.ms/perfi
 powershell "Expand-Archive -LiteralPath 'C:\Program Files\Common Files\DiskSpd.zip' -DestinationPath 'C:\Program Files\Common Files\DiskSpd'"
 powershell "Expand-Archive -LiteralPath 'C:\Program Files\Common Files\PerfInsights.zip' -DestinationPath 'C:\Program Files\Common Files\PerfInsights'"
 
-@REM Start PerfInsights for 900s
-powershell "start-job {& 'C:\Program Files\Common Files\PerfInsights\PerfInsights.exe' /run advanced xpns /d 900 /AcceptDisclaimerAndShareDiagnostics /sau /outputfolder 'C:\Program Files\Common Files'}"
+@REM asynchronously start PerfInsights for 900s
+powershell "Start-Process powershell -Verb runAs -ArgumentList {& 'C:\Program Files\Common Files\PerfInsights\PerfInsights.exe' /run advanced xpns /d 900 /AcceptDisclaimerAndShareDiagnostics /sau /outputfolder 'C:\Program Files\Common Files'}"
 
-@REM Run disk benchmarks
-powershell "& 'C:\Program Files\Common Files\DiskSpd\amd64\diskspd.exe' -c1024M -d120 -w100 -t"""$env:NUMBER_OF_PROCESSORS""" -o128 -b512k -r -Sh -L 'C:\Program Files\Common Files\testfile1.dat'"
-
+@REM Run disk benchmarks:
 @REM Maximum write IOPS
- powershell "& 'C:\Program Files\Common Files\PerfInsights\amd64\diskspd.exe' -c200G -w100 -b8K -F4 -r -o128 -W30 -d120 -Sh 'C:\Program Files\Common Files\testfile2.dat'"
- 
 @REM Maximum read IOPS
-powershell "& 'C:\Program Files\Common Files\PerfInsights\amd64\diskspd.exe' -c200G -b4K -F4 -r -o128 -W7200 -d120 -Sh 'C:\Program Files\Common Files\testfile3.dat'"
-
 @REM Maximum throughput
-powershell "& 'C:\Program Files\Common Files\PerfInsights\amd64\diskspd.exe' -c200G -b64K -F4 -r -o128 -W7200 -d120 -Sh 'C:\Program Files\Common Files\testfile4.dat'"
+powershell "& 'C:\Program Files\Common Files\DiskSpd\amd64\diskspd.exe' -c1024M -d30 -w100 -t"""$env:NUMBER_OF_PROCESSORS""" -o128 -b512k -r -Sh -L 'C:\Program Files\Common Files\testfile1.dat';Start-Sleep 60;& 'C:\Program Files\Common Files\PerfInsights\amd64\diskspd.exe' -c1024M -w100 -b8K -F4 -r -o128 -W30 -d30 -Sh 'C:\Program Files\Common Files\testfile2.dat';Start-Sleep 60;& 'C:\Program Files\Common Files\PerfInsights\amd64\diskspd.exe' -c1024M -b4K -F4 -r -o128 -W7200 -d30 -Sh 'C:\Program Files\Common Files\testfile3.dat';Start-Sleep 60;& 'C:\Program Files\Common Files\PerfInsights\amd64\diskspd.exe' -c1024M -b64K -F4 -r -o128 -W7200 -d30 -Sh 'C:\Program Files\Common Files\testfile4.dat';Start-Sleep 60;"
