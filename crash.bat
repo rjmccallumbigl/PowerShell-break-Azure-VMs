@@ -1,5 +1,3 @@
-@REM https://docs.microsoft.com/en-us/archive/blogs/vijaysk/tools-to-simulate-cpu-memory-disk-load
-
 @REM Download files
 powershell "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::TLS12" 
 powershell "(New-Object System.Net.WebClient).DownloadFile('https://github.com/Azure/repair-script-library/raw/master/src/windows/common/tools/kdbgctrl.exe', 'C:\Program Files\Common Files\kdbgctrl.exe')
