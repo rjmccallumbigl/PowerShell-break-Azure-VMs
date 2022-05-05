@@ -12,4 +12,4 @@ powershell "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Crash
 powershell "& 'C:\Program Files\Common Files\kdbgctrl.exe' -sd full"
 
 @REM Trigger crash
-powershell "& 'C:\Program Files\Common Files\NotMyFault\NotMyFault64.exe' /crash /accepteula"
+powershell "& 'C:\Program Files\Common Files\NotMyFault\NotMyFault64.exe' /hang /accepteula"
