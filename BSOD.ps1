@@ -19,5 +19,5 @@ public static class CS{
 "@
 $comparams = new-object -typename system.CodeDom.Compiler.CompilerParameters
 $comparams.CompilerOptions = '/unsafe'
-$a = Add-Type -TypeDefinition $source -Language CSharp -PassThru -CompilerParameters $comparams
+Add-Type -TypeDefinition $source -Language CSharp -PassThru -CompilerParameters $comparams
 [CS]::Kill()
